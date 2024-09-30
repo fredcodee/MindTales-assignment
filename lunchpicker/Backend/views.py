@@ -1,7 +1,7 @@
 from rest_framework.response import Response
-from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,  permission_classes
+from rest_framework.permissions import IsAuthenticated
 from .models import Restaurant, Menu, Vote
 from .serializers import RestaurantSerializer, MenuSerializer, VoteSerializer , UserSerializer
 
@@ -37,7 +37,7 @@ def registerUser(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-# create resturants
+@permission_classes([IsAuthenticated]) 
 @api_view(['POST'])
 def createRestaurant(request):
     serializer = RestaurantSerializer(data=request.data)
@@ -47,6 +47,7 @@ def createRestaurant(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # upload menu
+@permission_classes([IsAuthenticated]) 
 @api_view(['POST'])
 def uploadMenu(request):
     serializer = MenuSerializer(data=request.data)
@@ -56,6 +57,7 @@ def uploadMenu(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 # get all restaurants
+@permission_classes([IsAuthenticated]) 
 @api_view(['GET'])
 def getRestaurants(request):
     restaurants = Restaurant.objects.all()
@@ -63,6 +65,7 @@ def getRestaurants(request):
     return Response(serializer.data)
 
 #get menu of a restaurant by filtered by date and restaurant id
+@permission_classes([IsAuthenticated]) 
 @api_view(['GET'])
 def getMenu(request):
     date = request.data['date']
@@ -74,6 +77,7 @@ def getMenu(request):
     
 
 #vote for menu
+@permission_classes([IsAuthenticated]) 
 @api_view(['POST'])
 def vote_for_menu(request):
     version = request.headers.get('Version')  #assuming mobile versions will be sent here the old one is 1.0 and latest version is 2.0
@@ -120,9 +124,23 @@ def voteVerification(menu_id, points, date):
     
 
 #get results by date
+@permission_classes([IsAuthenticated]) 
 @api_view(['GET'])
 def getResults(request):
     date = request.data['date']
     menu = Menu.objects.filter(date=date)
-    serializer = MenuSerializer(menu, many=True)
-    return Response(serializer.data)
+    data = []
+    # get the votes for each menu
+    for list in menu:
+        restaurant_name = list.restaurant.name
+        votes = Vote.objects.filter(date=date, menu=list)
+        total_votes  = 0
+        for vote in votes:
+            total_votes += vote.points
+        data.append({'restaurant_name': restaurant_name,'menu': list, 'total_votes': total_votes})
+        
+    if len(data) == 0:
+        return Response({"error": "No votes found"}, status=status.HTTP_404_NOT_FOUND)
+    
+    data.sort(key=lambda x: x['total_votes'], reverse=True)   
+    return Response({"date": date, "results": data}, status=status.HTTP_200_OK)
