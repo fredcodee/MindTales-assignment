@@ -1,0 +1,6 @@
+.env
+Dockerfile
+lunchprojectenv
+migrations
+__pycache__
+db.sqlite3

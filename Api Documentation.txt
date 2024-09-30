@@ -1,18 +1,229 @@
-API Endpoints:
+API Documentation
 
-Authentication:
-/api/auth/register/: Register a new employee.
-/api/auth/login/: Authenticate and get token.
+1. Health Check
 
-Restaurant:
-POST /api/restaurant/: Create a new restaurant.
-POST /api/restaurant/{id}/menu/: Upload daily menu for a restaurant.
+Endpoint: /health
+Method: GET
+Description: Checks the health of the API service.
+Response: Status
+Body: none
 
-Menu:
-GET /api/menu/today/: Get the current day’s menu.
+2. User Registration
 
-Voting:
-POST /api/vote/: Submit a vote (handles versioning).
+Endpoint: /register
+Method: POST
+Description: Registers a new user.
+Request Body:
+    Example:
+    {
+        "username": "newuser",
+        "email": "newuser@example.com",
+        "password": "password123"
+    }
 
-Results:
-GET /api/results/today/: Get the current day’s voting results.
+Response:
+    Status: 201 Created
+    Body:
+    {
+        "id": 1,
+        "username": "newuser",
+        "email": "newuser@example.com"
+    }
+
+    Status: 400 Bad Request
+    Body:
+    {
+        "error": "Missing information for complete registration",
+        "missing_fields": ["password"]
+    }
+
+3. Login
+Endpoint: /login
+Method: POST
+Description: login to get token.
+Request Body:
+    Example:
+    {
+        "username": "newuser",
+        "password": "password123"
+    }
+
+
+4. Create Restaurant
+
+Endpoint: /restaurant/create
+Method: POST
+Description: Creates a new restaurant.
+Headers: Authorization: token
+Request Body:
+Example:
+    {
+        "name": "New Restaurant",
+        "address": "456 New St"
+    }
+
+Response:
+    Status: 201 Created
+    Body:
+    {
+        "id": 2,
+        "name": "New Restaurant",
+        "address": "456 New St"
+    }
+
+    Status: 400 Bad Request
+    Body:
+    {
+        "name": ["This field is required."],
+        "address": ["This field is required."]
+    }
+
+
+5. Upload Menu
+
+Endpoint: /restaurant/upload/menu
+Method: POST
+Description: Uploads a menu for a restaurant.
+Headers: Authorization: token,
+Request Body:
+
+Example:
+    {
+        "restaurant": 1,
+        "date": "2024-09-30",
+        "items": "Sushi, Ramen, Tempura"
+    }
+
+Response:
+Status: 201 Created
+Body:
+    {
+        "id": 1,
+        "restaurant": 1,
+        "date": "2024-09-30",
+        "items": "Sushi, Ramen, Tempura"
+    }
+
+    Status: 400 Bad Request
+    Body:
+
+
+    {
+        "restaurant": ["This field is required."],
+        "date": ["This field is required."],
+        "items": ["This field is required."]
+    }
+
+
+
+6. Get Restaurants
+
+Endpoint: /restaurant/list
+Method: GET
+Description: Retrieves a list of all restaurants.
+Headers: Authorization: token
+Response:
+Status: 200 OK
+Body:
+    [
+        {
+            "id": 1,
+            "name": "Test Restaurant",
+            "address": "123 Test St"
+        }
+    ]
+
+
+
+7. Get Menu by Date
+
+Endpoint: /restaurant/menu/date
+Method: GET
+Description: Retrieves the menu for a specific restaurant on a specific date.
+Request Parameters:
+date (required): Date for which to retrieve the menu (format: YYYY-MM-DD).
+restaurant_id (required): ID of the restaurant.
+Headers: Authorization: token,
+
+Response:
+Status: 200 OK
+Body:
+    [
+        {
+            "id": 1,
+            "restaurant": 1,
+            "date": "2024-09-30",
+            "items": "Sushi, Ramen, Tempura"
+        }
+    ]
+
+Status: 404 Not Found
+Body:
+    {
+        "error": "Menu not found."
+    }
+
+
+
+
+8. Vote for Menu
+
+Endpoint: /restaurant/menu/vote
+Method: POST
+Description: Casts a vote for a menu item.
+Headers: Authorization: token, MOBILE_VERSION: {version}
+Request Body (Old API version):
+Example:
+    {
+        "menu_id": 1,
+        "points": 3,
+        "date": "2024-09-30"
+    }
+
+Request Body (New API version):
+Example:
+    {
+        "menu_votes": [
+            {"menu_id": 1, "points": 2},
+            {"menu_id": 2, "points": 1}
+        ],
+        "date": "2024-09-30"
+}
+
+Response:
+Status: 201 Created
+Body:
+    {
+        "message": "Vote cast successfully."
+    }
+
+
+
+9. Get Results
+
+Endpoint: /restaurant/lunch/result
+Method: GET
+Description: Retrieves the voting results for a specific date.
+Request Parameters:
+date (required): Date for which to retrieve the results (format: YYYY-MM-DD).
+Headers: Authorization: token
+
+Response:
+Status: 200 OK
+Body:
+    {
+        "date": "2024-09-30",
+        "results": [
+            {
+                "restaurant_name": "Test Restaurant",
+                "menu": {...},
+                "total_votes": 5
+            }
+        ]
+    }
+
+Status: 404 Not Found
+Body:
+    {
+        "error": "No votes found."
+    }
