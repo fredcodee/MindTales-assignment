@@ -1,8 +1,6 @@
 A Django backend service to manage restaurant menus and voting for a company's employees
 
-
-
-##git  Features Overview:
+## Features Overview:
 
 ### Authentication:
 Users (employees) should authenticate using token-based authentication.
@@ -26,7 +24,8 @@ An endpoint to fetch the results for the current day’s menu.
 
 
 ### API DOCUMENTATION
-click here ...
+click here ...   https://github.com/fredcodee/MindTales-assignment/blob/main/Api%20Documentation.txt
+
 
 
 ### Cloud Architecture Diagram:
