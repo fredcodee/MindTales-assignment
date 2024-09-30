@@ -2,7 +2,7 @@ A Django backend service to manage restaurant menus and voting for a company's e
 
 
 
-### Features Overview:
+##git  Features Overview:
 
 ### Authentication:
 Users (employees) should authenticate using token-based authentication.
