@@ -3,7 +3,7 @@ from rest_framework import status
 from rest_framework.decorators import api_view,  permission_classes
 from rest_framework.permissions import IsAuthenticated
 from .models import Restaurant, Menu, Vote
-from .serializers import RestaurantSerializer, MenuSerializer, VoteSerializer , UserSerializer
+from .serializers import RestaurantSerializer, MenuSerializer, UserSerializer
 
 
 
@@ -80,7 +80,7 @@ def getMenu(request):
 @permission_classes([IsAuthenticated]) 
 @api_view(['POST'])
 def vote_for_menu(request):
-    version = request.headers.get('Version')  #assuming mobile versions will be sent here the old one is 1.0 and latest version is 2.0
+    version = request.headers.get('MOBILE_VERSION')  #assuming mobile versions will be sent here the old one is 1.0 and latest version is 2.0
 
     if version == '1.0':  # Old API version
         # Accept only one menu ID
