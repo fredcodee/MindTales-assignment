@@ -11,7 +11,7 @@ urlpatterns = [
     path('restaurant/list', views.getRestaurants, name="get-restaurants"),
     path('restaurant/upload/menu', views.uploadMenu, name="upload-menu"),
     path('restaurant/menu/date', views.getMenu, name="get-menu-by-date"),
-    path('restaurant/menu/vote', views.vote_for_menu, name="vote-for-menu"),
+    path('restaurant/menu/vote', views.vote_for_menu, name="vote"),
     path('restaurant/lunch/result', views.getResults, name="get-results")
     
 ]
