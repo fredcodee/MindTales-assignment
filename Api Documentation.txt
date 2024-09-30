@@ -1,0 +1,18 @@
+API Endpoints:
+
+Authentication:
+/api/auth/register/: Register a new employee.
+/api/auth/login/: Authenticate and get token.
+
+Restaurant:
+POST /api/restaurant/: Create a new restaurant.
+POST /api/restaurant/{id}/menu/: Upload daily menu for a restaurant.
+
+Menu:
+GET /api/menu/today/: Get the current day’s menu.
+
+Voting:
+POST /api/vote/: Submit a vote (handles versioning).
+
+Results:
+GET /api/results/today/: Get the current day’s voting results.

@@ -1,0 +1,24 @@
+A Django backend service to manage restaurant menus and voting for a company's employees
+
+# Features Overview:
+
+#### Authentication:
+Users (employees) should authenticate using token-based authentication.
+Endpoints to handle login and registration.
+
+#### Restaurant Management:
+Restaurant CRUD operations.
+Restaurants should upload daily menus through an API.
+Menu linked to a specific restaurant and specific date.
+
+#### Menu Voting:
+Old API version: Employees vote for a single menu.
+New API version: Employees vote for top three menus with weighted points (1-3).
+Versioning Support:
+
+The API should read the mobile app version from headers.
+Different endpoints or logic for handling old vs. new voting API.
+
+#### Menu Results:
+An endpoint to fetch the results for the current day’s menu.
+
