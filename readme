@@ -1,7 +1,25 @@
 A Django backend service to manage restaurant menus and voting for a company's employees
 
-## Features Overview:
 
+
+# Lunch Picker
+
+## Prerequisites
+- Docker
+- Docker Compose
+
+## Getting Started
+
+1. Clone the repository:
+   git clone https://github.com/username/lunchpicker.git
+   cd lunchpicker
+
+
+2. Build and run the application:
+    docker-compose up --build
+
+
+## Features Overview:
 ### Authentication:
 Users (employees) should authenticate using token-based authentication.
 Endpoints to handle login and registration.
